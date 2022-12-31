@@ -13,13 +13,10 @@ module.exports = {
                 email: email
             }
         }).then(user => {
-
             if (!user) {
                 res.status(404).json({ msg: "User with this email not found" });
             } else {
-
                 if (bcrypt.compareSync(password, user.password)) {
-
                     // create the token
                     let token = jwt.sign({ user: user }, authConfig.secret, {
                         expiresIn: authConfig.expires
@@ -31,11 +28,9 @@ module.exports = {
                     })
 
                 } else {
-
                     // Unauthorized Access
-                    res.status(401).json({ msg: "Contraseña incorrecta" })
+                    res.status(401).json({ msg: "Incorrect Password" })
                 }
-
             }
 
         }).catch(err => {
@@ -46,13 +41,13 @@ module.exports = {
   signUp(req, res) {
 
 
-    // let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+    let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
 
    
     User.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: password
     }).then(user => {
 
         
